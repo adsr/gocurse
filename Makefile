@@ -20,7 +20,7 @@ CGO_LDFLAGS=-lncurses
 #	CGO_LDFLAGS+=-L/home/rsc/gmp32/lib
 # Note the += on the second line.
 
-CLEANFILES+=
+CLEANFILES+=sample
 
 include $(GOROOT)/src/Make.pkg
 
