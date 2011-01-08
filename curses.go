@@ -116,35 +116,35 @@ func Color_pair(pair int) int32 {
 }
 
 func Noecho() os.Error {
-	if int(C.noecho()) == 0 {
+	if int(C.noecho()) == C.ERR {
 		return CursesError{"Noecho failed"}
 	}
 	return nil
 }
 
 func Echo() os.Error {
-	if int(C.noecho()) == 0 {
+	if int(C.noecho()) == C.ERR {
 		return CursesError{"Echo failed"}
 	}
 	return nil
 }
 
 func Curs_set(c int) os.Error {
-	if C.curs_set(C.int(c)) == 0 {
+	if C.curs_set(C.int(c)) == C.ERR {
 		return CursesError{"Curs_set failed"}
 	}
 	return nil
 }
 
 func Nocbreak() os.Error {
-	if C.nocbreak() == 0 {
+	if C.nocbreak() == C.ERR {
 		return CursesError{"Nocbreak failed"}
 	}
 	return nil
 }
 
 func Cbreak() os.Error {
-	if C.cbreak() == 0 {
+	if C.cbreak() == C.ERR {
 		return CursesError{"Cbreak failed"}
 	}
 	return nil
@@ -165,7 +165,7 @@ func Noraw() os.Error {
 }
 
 func Endwin() os.Error {
-	if C.endwin() == 0 {
+	if C.endwin() == C.ERR {
 		return CursesError{"Endwin failed"}
 	}
 	return nil
@@ -175,13 +175,13 @@ func (win *Window) Getch() int {
 	return int(C.wgetch((*C.WINDOW)(win)))
 }
 
-func (win *Window) Addch(x, y int, c int32, flags int32) {
+func (win *Window) Addch(y, x int, c int32, flags int32) {
 	C.mvwaddch((*C.WINDOW)(win), C.int(y), C.int(x), C.chtype(c)|C.chtype(flags))
 }
 
 // Since CGO currently can't handle varg C functions we'll mimic the
 // ncurses addstr functions.
-func (win *Window) Addstr(x, y int, str string, flags int32, v ...interface{}) {
+func (win *Window) Addstr(y, x int, str string, flags int32, v ...interface{}) {
 	newstr := fmt.Sprintf(str, v...)
 
 	win.Move(x, y)
@@ -192,7 +192,7 @@ func (win *Window) Addstr(x, y int, str string, flags int32, v ...interface{}) {
 }
 
 // Normally Y is the first parameter passed in curses.
-func (win *Window) Move(x, y int) {
+func (win *Window) Move(y, x int) {
 	C.wmove((*C.WINDOW)(win), C.int(y), C.int(x))
 }
 
@@ -204,14 +204,14 @@ func (w *Window) Keypad(tf bool) os.Error {
 	if tf == false {
 		outint = 0
 	}
-	if C.keypad((*C.WINDOW)(w), C.int(outint)) == 0 {
+	if C.keypad((*C.WINDOW)(w), C.int(outint)) == C.ERR {
 		return CursesError{"Keypad failed"}
 	}
 	return nil
 }
 
 func (win *Window) Refresh() os.Error {
-	if C.wrefresh((*C.WINDOW)(win)) == 0 {
+	if C.wrefresh((*C.WINDOW)(win)) == C.ERR {
 		return CursesError{"refresh failed"}
 	}
 	return nil
