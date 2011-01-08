@@ -184,7 +184,7 @@ func (win *Window) Addch(y, x int, c int32, flags int32) {
 func (win *Window) Addstr(y, x int, str string, flags int32, v ...interface{}) {
 	newstr := fmt.Sprintf(str, v...)
 
-	win.Move(x, y)
+	win.Move(y, x)
 
 	for i := 0; i < len(newstr); i++ {
 		C.waddch((*C.WINDOW)(win), C.chtype(newstr[i])|C.chtype(flags))
