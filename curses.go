@@ -8,14 +8,14 @@ package curses
 import "C"
 
 import (
-	"fmt";
-	"os";
-	"unsafe";
+	"fmt"
+	"os"
+	"unsafe"
 )
 
-type void unsafe.Pointer;
+type void unsafe.Pointer
 
-type Window C.WINDOW;
+type Window C.WINDOW
 
 type CursesError struct {
 	message string
@@ -27,7 +27,7 @@ func (ce CursesError) String() string {
 
 // Cursor options.
 const (
-	CURS_HIDE = iota;
+	CURS_HIDE = iota
 	CURS_NORM
 	CURS_HIGH
 )
@@ -61,7 +61,7 @@ func Initscr() (*Window, os.Error) {
 	if Stdwin == nil {
 		return nil, CursesError{"Initscr failed"}
 	}
-	
+
 	return Stdwin, nil
 }
 
@@ -75,7 +75,7 @@ func Newwin(rows int, cols int, starty int, startx int) (*Window, os.Error) {
 	return nw, nil
 }
 
-func (win *Window) Subwin(rows int, cols int, starty int, startx int) (*Window, os.Error)  {
+func (win *Window) Subwin(rows int, cols int, starty int, startx int) (*Window, os.Error) {
 	sw := (*Window)(C.subwin((*C.WINDOW)(win), C.int(rows), C.int(cols), C.int(starty), C.int(startx)))
 
 	if sw == nil {
@@ -85,7 +85,7 @@ func (win *Window) Subwin(rows int, cols int, starty int, startx int) (*Window, 
 	return sw, nil
 }
 
-func (win *Window) Derwin(rows int, cols int, starty int, startx int) (*Window, os.Error)  {
+func (win *Window) Derwin(rows int, cols int, starty int, startx int) (*Window, os.Error) {
 	dw := (*Window)(C.derwin((*C.WINDOW)(win), C.int(rows), C.int(cols), C.int(starty), C.int(startx)))
 
 	if dw == nil {
@@ -133,28 +133,42 @@ func Curs_set(c int) os.Error {
 	if C.curs_set(C.int(c)) == 0 {
 		return CursesError{"Curs_set failed"}
 	}
-	return nil;
+	return nil
 }
 
 func Nocbreak() os.Error {
 	if C.nocbreak() == 0 {
 		return CursesError{"Nocbreak failed"}
 	}
-	return nil;
+	return nil
 }
 
 func Cbreak() os.Error {
 	if C.cbreak() == 0 {
 		return CursesError{"Cbreak failed"}
 	}
-	return nil;
+	return nil
+}
+
+func Raw() os.Error {
+	if C.raw() == C.ERR {
+		return CursesError{"Raw failed"}
+	}
+	return nil
+}
+
+func Noraw() os.Error {
+	if C.noraw() == C.ERR {
+		return CursesError{"Noraw failed"}
+	}
+	return nil
 }
 
 func Endwin() os.Error {
 	if C.endwin() == 0 {
 		return CursesError{"Endwin failed"}
 	}
-	return nil;
+	return nil
 }
 
 func (win *Window) Getch() int {
@@ -162,41 +176,45 @@ func (win *Window) Getch() int {
 }
 
 func (win *Window) Addch(x, y int, c int32, flags int32) {
-	C.mvwaddch((*C.WINDOW)(win), C.int(y), C.int(x), C.chtype(c) | C.chtype(flags));
+	C.mvwaddch((*C.WINDOW)(win), C.int(y), C.int(x), C.chtype(c)|C.chtype(flags))
 }
 
 // Since CGO currently can't handle varg C functions we'll mimic the
 // ncurses addstr functions.
 func (win *Window) Addstr(x, y int, str string, flags int32, v ...interface{}) {
-	newstr := fmt.Sprintf(str, v...);
+	newstr := fmt.Sprintf(str, v...)
 
-	win.Move(x, y);
+	win.Move(x, y)
 
 	for i := 0; i < len(newstr); i++ {
-		C.waddch((*C.WINDOW)(win), C.chtype(newstr[i]) | C.chtype(flags));
+		C.waddch((*C.WINDOW)(win), C.chtype(newstr[i])|C.chtype(flags))
 	}
 }
 
 // Normally Y is the first parameter passed in curses.
 func (win *Window) Move(x, y int) {
-	C.wmove((*C.WINDOW)(win), C.int(y), C.int(x));
+	C.wmove((*C.WINDOW)(win), C.int(y), C.int(x))
 }
 
 func (w *Window) Keypad(tf bool) os.Error {
-	var outint int;
-	if tf == true {outint = 1;}
-	if tf == false {outint = 0;}
+	var outint int
+	if tf == true {
+		outint = 1
+	}
+	if tf == false {
+		outint = 0
+	}
 	if C.keypad((*C.WINDOW)(w), C.int(outint)) == 0 {
 		return CursesError{"Keypad failed"}
 	}
-	return nil;
+	return nil
 }
 
 func (win *Window) Refresh() os.Error {
 	if C.wrefresh((*C.WINDOW)(win)) == 0 {
 		return CursesError{"refresh failed"}
 	}
-	return nil;
+	return nil
 }
 
 func (win *Window) Redrawln(beg_line, num_lines int) {
@@ -204,23 +222,23 @@ func (win *Window) Redrawln(beg_line, num_lines int) {
 }
 
 func (win *Window) Redraw() {
-	C.redrawwin((*C.WINDOW)(win));
+	C.redrawwin((*C.WINDOW)(win))
 }
 
 func (win *Window) Clear() {
-	C.wclear((*C.WINDOW)(win));
+	C.wclear((*C.WINDOW)(win))
 }
 
 func (win *Window) Erase() {
-	C.werase((*C.WINDOW)(win));
+	C.werase((*C.WINDOW)(win))
 }
 
 func (win *Window) Clrtobot() {
-	C.wclrtobot((*C.WINDOW)(win));
+	C.wclrtobot((*C.WINDOW)(win))
 }
 
 func (win *Window) Clrtoeol() {
-	C.wclrtoeol((*C.WINDOW)(win));
+	C.wclrtoeol((*C.WINDOW)(win))
 }
 
 func (win *Window) Box(verch, horch int) {
