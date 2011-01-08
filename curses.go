@@ -164,6 +164,20 @@ func Noraw() os.Error {
 	return nil
 }
 
+func Nl() os.Error {
+	if C.nl() == C.ERR {
+		return CursesError{"Nl failed"}
+	}
+	return nil
+}
+
+func Nonl() os.Error {
+	if C.nonl() == C.ERR {
+		return CursesError{"Nonl failed"}
+	}
+	return nil
+}
+
 func Endwin() os.Error {
 	if C.endwin() == C.ERR {
 		return CursesError{"Endwin failed"}
