@@ -193,8 +193,7 @@ func (win *Window) Addch(y, x int, c int32, flags int32) {
 	C.mvwaddch((*C.WINDOW)(win), C.int(y), C.int(x), C.chtype(c)|C.chtype(flags))
 }
 
-// Since CGO currently can't handle varg C functions we'll mimic the
-// ncurses addstr functions.
+// This was here when I forked... I have nothing else to say about it.
 func (win *Window) Addstr(y, x int, str string, flags int32, v ...interface{}) {
 	newstr := fmt.Sprintf(str, v...)
 
@@ -203,6 +202,14 @@ func (win *Window) Addstr(y, x int, str string, flags int32, v ...interface{}) {
 	for i := 0; i < len(newstr); i++ {
 		C.waddch((*C.WINDOW)(win), C.chtype(newstr[i])|C.chtype(flags))
 	}
+}
+
+func (w *Window) Mvwaddstr(y, x int, str string) {
+	C.mvwaddstr((*C.WINDOW)(w), C.int(y), C.int(x), C.CString(str))
+}
+
+func (w *Window) Mvwaddnstr(y, x int, str string, n int) {
+	C.mvwaddnstr((*C.WINDOW)(w), C.int(y), C.int(x), C.CString(str), C.int(n))
 }
 
 // Normally Y is the first parameter passed in curses.
