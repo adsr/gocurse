@@ -269,3 +269,25 @@ func (win *Window) Box(verch, horch int) {
 func (win *Window) Background(colour int32) {
 	C.wbkgd((*C.WINDOW)(win), C.chtype(colour))
 }
+
+func Standend() os.Error {
+	if C.standend() == C.ERR {
+		return CursesError{"standend error"}
+	}
+	return nil
+}
+
+func Wstandend(win *Window) os.Error {
+	if C.wstandend((*C.WINDOW)(win)) == C.ERR {
+		return CursesError{"wstandend error"}
+	}
+	return nil
+}
+
+func Beep() os.Error {
+	if C.beep() == C.ERR {
+		return CursesError{"beep failed"}
+	}
+	return nil
+}
+
