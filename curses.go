@@ -5,6 +5,8 @@ package curses
 // #define _Bool int
 // #define NCURSES_OPAQUE 1
 // #include <curses.h>
+// #include <locale.h>
+// #include <stdlib.h>
 import "C"
 
 import (
@@ -56,6 +58,9 @@ func init() {
 }
 
 func Initscr() (*Window, os.Error) {
+	mt := C.CString("")
+	C.setlocale(C.LC_ALL, mt)
+	defer C.free(unsafe.Pointer(mt))
 	Stdwin = (*Window)(C.initscr())
 
 	if Stdwin == nil {
