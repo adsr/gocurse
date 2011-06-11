@@ -16,14 +16,14 @@ building
 
 to build the bindings you will need to:
 
- * set the GOROOT environment variable
+* set the GOROOT environment variable
 
-   * if not set when you installed go use: export GOROOT=/path/to/go
-   * you should add this to your .bashrc file
+  * if not set when you installed go use: export GOROOT=/path/to/go
+  * you should add this to your .bashrc file
 
- * have the development files for the curses library
+* have the development files for the curses library
 
-   * on fedora: sudo yum install ncurses-devel
+  * on fedora: sudo yum install ncurses-devel
 
 after this run::
 
