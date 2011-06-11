@@ -44,6 +44,7 @@ func loop(x, y int) {
 	for {
 		curses.Stdwin.Addstr(0, 0, "Hello,\nworld!", 0);
 		curses.Stdwin.Addstr(3, 0, "use the cursor keys to move around", 0);
+		curses.Stdwin.Addstr(4, 0, "press the 'q' key to quit", 0);
 		inp := curses.Stdwin.Getch();
 		quit = false
 
