@@ -4,9 +4,9 @@ package curses
 // struct _win_st{};
 // #define _Bool int
 // #define NCURSES_OPAQUE 1
-// #include <curses.h>
 // #include <locale.h>
 // #include <stdlib.h>
+// #include <curses.h>
 import "C"
 
 import (
@@ -194,7 +194,7 @@ func (win *Window) Getch() int {
 	return int(C.wgetch((*C.WINDOW)(win)))
 }
 
-func (win *Window) Addch(y, x int, c int32, flags int32) {
+func (win *Window) Mvwaddch(y, x int, c int32, flags int32) {
 	C.mvwaddch((*C.WINDOW)(win), C.int(y), C.int(x), C.chtype(c)|C.chtype(flags))
 }
 
