@@ -66,7 +66,7 @@ func loop(x, y int) {
 		}
 
 		curses.Stdwin.Clear();
-		curses.Stdwin.Addch(y, x, '@', curses.Color_pair(1));
+		curses.Stdwin.Mvwaddch(y, x, '@', curses.Color_pair(1));
 		curses.Stdwin.Refresh();
 	}
 }
