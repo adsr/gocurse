@@ -194,7 +194,7 @@ func (win *Window) Getch() int {
 	return int(C.wgetch((*C.WINDOW)(win)))
 }
 
-func (win *Window) Mvwaddch(y, x int, c int32, flags int32) {
+func (win *Window) Mvaddch(y, x int, c int32, flags int32) {
 	C.mvwaddch((*C.WINDOW)(win), C.int(y), C.int(x), C.chtype(c)|C.chtype(flags))
 }
 
@@ -209,11 +209,11 @@ func (win *Window) Addstr(y, x int, str string, flags int32, v ...interface{}) {
 	}
 }
 
-func (w *Window) Mvwaddstr(y, x int, str string) {
+func (w *Window) Mvaddstr(y, x int, str string) {
 	C.mvwaddstr((*C.WINDOW)(w), C.int(y), C.int(x), C.CString(str))
 }
 
-func (w *Window) Mvwaddnstr(y, x int, str string, n int) {
+func (w *Window) Mvaddnstr(y, x int, str string, n int) {
 	C.mvwaddnstr((*C.WINDOW)(w), C.int(y), C.int(x), C.CString(str), C.int(n))
 }
 
@@ -282,7 +282,7 @@ func Standend() os.Error {
 	return nil
 }
 
-func Wstandend(win *Window) os.Error {
+func (win *Window) standend() os.Error {
 	if C.wstandend((*C.WINDOW)(win)) == C.ERR {
 		return CursesError{"wstandend error"}
 	}
