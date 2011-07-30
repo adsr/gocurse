@@ -29,6 +29,6 @@ curses_defs.go: curses.c
 
 # Simple test programs
 
-sample: install sample.go
-	$(GC) sample.go
-	$(LD) -o $@ sample.$O
+%: install %.go
+	$(GC) $*.go
+	$(LD) -o $@ $*.$O
