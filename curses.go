@@ -190,6 +190,13 @@ func Endwin() os.Error {
 	return nil
 }
 
+func Use_default_colors() os.Error {
+    if C.use_default_colors() == C.ERR {
+        return CursesError{"Use_default_colors failed"}
+    }
+    return nil
+}
+
 func (win *Window) Getch() int {
 	return int(C.wgetch((*C.WINDOW)(win)))
 }
@@ -277,6 +284,26 @@ func (win *Window) Box(verch, horch int) {
 
 func (win *Window) Background(colour int32) {
 	C.wbkgd((*C.WINDOW)(win), C.chtype(colour))
+}
+
+func (win *Window) Resize(rows, cols int) {
+    C.wresize((*C.WINDOW)(win), C.int(rows), C.int(cols))
+}
+
+func (win *Window) Mvwin(y, x int) {
+    C.mvwin((*C.WINDOW)(win), C.int(y), C.int(x))
+}
+
+func (win *Window) Attron(flag int32) {
+    C.wattron((*C.WINDOW)(win), C.int(flag))
+}
+
+func (win *Window) Attroff(flag int32) {
+    C.wattroff((*C.WINDOW)(win), C.int(flag))
+}
+
+func (win *Window) Attrset(flags int32) {
+    C.wattrset((*C.WINDOW)(win), C.int(flags))
 }
 
 func Standend() os.Error {
